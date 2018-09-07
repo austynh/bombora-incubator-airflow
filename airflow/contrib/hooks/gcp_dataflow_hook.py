@@ -80,7 +80,11 @@ class _DataflowJob(LoggingMixin):
         return job
 
     def wait_for_done(self):
+        print("Entering _DataflowJob.wait_for_done()...")
         while True:
+            print("BEGIN self._job=%s" % self._job)
+            print("self._job_name=%s" % self._job_name)
+            print("self._job_id=%s" % self._job_id)
             if self._job and 'currentState' in self._job:
                 if 'JOB_STATE_DONE' == self._job['currentState']:
                     return True
@@ -103,9 +107,11 @@ class _DataflowJob(LoggingMixin):
                         "Google Cloud Dataflow job {} was unknown state: {}".format(
                             self._job['name'], self._job['currentState']))
             else:
+                print("self._job is None or currentState not in self._job, sleeping...")
                 time.sleep(15)
 
             self._job = self._get_job()
+            print("END self._job=%s" % self._job)
 
     def get(self):
         return self._job
@@ -141,6 +147,7 @@ class _Dataflow(LoggingMixin):
     def wait_for_done(self):
         reads = [self._proc.stderr.fileno(), self._proc.stdout.fileno()]
         self.log.info("Start waiting for DataFlow process to complete.")
+        print("Start waiting for DataFlow process to complete.")
         while self._proc.poll() is None:
             ret = select.select(reads, [], [], 5)
             if ret is not None:
@@ -148,8 +155,10 @@ class _Dataflow(LoggingMixin):
                     line = self._line(fd)
                     if line:
                         self.log.debug(line[:-1])
+                        print(line[:-1])
             else:
                 self.log.info("Waiting for DataFlow process to complete.")
+                print("Waiting for DataFlow process to complete.")
         if self._proc.returncode is not 0:
             raise Exception("DataFlow failed with return code {}".format(
                 self._proc.returncode))

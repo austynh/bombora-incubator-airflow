@@ -131,6 +131,8 @@ class DataFlowJavaOperator(BaseOperator):
         self.job_class = job_class
 
     def execute(self, context):
+        self.log.info("DataFlowJavaOperator execute called...")
+        print("DataFlowJavaOperator execute called...")
         bucket_helper = GoogleCloudBucketHelper(
             self.gcp_conn_id, self.delegate_to)
         self.jar = bucket_helper.google_cloud_to_local(self.jar)
