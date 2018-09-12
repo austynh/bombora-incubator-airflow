@@ -716,6 +716,13 @@ class DataProcPigOperator(BaseOperator):
     :type delegate_to: string
     :param region: The specified region where the dataproc cluster is created.
     :type region: string
+    :param job_error_states: Job states that should be considered error states.
+        Any states in this list will result in an error being raised and failure of the
+        task. Eg, if the ``CANCELLED`` state should also be considered a task failure,
+        pass in ``['ERROR', 'CANCELLED']``. Possible values are currently only
+        ``'ERROR'`` and ``'CANCELLED'``, but could change in the future. Defaults to
+        ``['ERROR']``.
+    :type job_error_states: list
     :var dataproc_job_id: The actual "jobId" as submitted to the Dataproc API.
         This is useful for identifying or linking to the job in the Google Cloud Console
         Dataproc UI, as the actual "jobId" submitted to the Dataproc API is appended with
@@ -739,6 +746,7 @@ class DataProcPigOperator(BaseOperator):
             gcp_conn_id='google_cloud_default',
             delegate_to=None,
             region='global',
+            job_error_states=['ERROR'],
             *args,
             **kwargs):
 
@@ -753,6 +761,7 @@ class DataProcPigOperator(BaseOperator):
         self.dataproc_properties = dataproc_pig_properties
         self.dataproc_jars = dataproc_pig_jars
         self.region = region
+        self.job_error_states = job_error_states
 
     def execute(self, context):
         hook = DataProcHook(gcp_conn_id=self.gcp_conn_id,
@@ -771,7 +780,7 @@ class DataProcPigOperator(BaseOperator):
         job_to_submit = job.build()
         self.dataproc_job_id = job_to_submit["job"]["reference"]["jobId"]
 
-        hook.submit(hook.project_id, job_to_submit, self.region)
+        hook.submit(hook.project_id, job_to_submit, self.region, self.job_error_states)
 
 
 class DataProcHiveOperator(BaseOperator):
@@ -804,6 +813,13 @@ class DataProcHiveOperator(BaseOperator):
     :type delegate_to: string
     :param region: The specified region where the dataproc cluster is created.
     :type region: string
+    :param job_error_states: Job states that should be considered error states.
+        Any states in this list will result in an error being raised and failure of the
+        task. Eg, if the ``CANCELLED`` state should also be considered a task failure,
+        pass in ``['ERROR', 'CANCELLED']``. Possible values are currently only
+        ``'ERROR'`` and ``'CANCELLED'``, but could change in the future. Defaults to
+        ``['ERROR']``.
+    :type job_error_states: list
     :var dataproc_job_id: The actual "jobId" as submitted to the Dataproc API.
         This is useful for identifying or linking to the job in the Google Cloud Console
         Dataproc UI, as the actual "jobId" submitted to the Dataproc API is appended with
@@ -827,6 +843,7 @@ class DataProcHiveOperator(BaseOperator):
             gcp_conn_id='google_cloud_default',
             delegate_to=None,
             region='global',
+            job_error_states=['ERROR'],
             *args,
             **kwargs):
 
@@ -841,6 +858,7 @@ class DataProcHiveOperator(BaseOperator):
         self.dataproc_properties = dataproc_hive_properties
         self.dataproc_jars = dataproc_hive_jars
         self.region = region
+        self.job_error_states = job_error_states
 
     def execute(self, context):
         hook = DataProcHook(gcp_conn_id=self.gcp_conn_id,
@@ -860,7 +878,7 @@ class DataProcHiveOperator(BaseOperator):
         job_to_submit = job.build()
         self.dataproc_job_id = job_to_submit["job"]["reference"]["jobId"]
 
-        hook.submit(hook.project_id, job_to_submit, self.region)
+        hook.submit(hook.project_id, job_to_submit, self.region, self.job_error_states)
 
 
 class DataProcSparkSqlOperator(BaseOperator):
@@ -894,6 +912,13 @@ class DataProcSparkSqlOperator(BaseOperator):
     :type delegate_to: string
     :param region: The specified region where the dataproc cluster is created.
     :type region: string
+    :param job_error_states: Job states that should be considered error states.
+        Any states in this list will result in an error being raised and failure of the
+        task. Eg, if the ``CANCELLED`` state should also be considered a task failure,
+        pass in ``['ERROR', 'CANCELLED']``. Possible values are currently only
+        ``'ERROR'`` and ``'CANCELLED'``, but could change in the future. Defaults to
+        ``['ERROR']``.
+    :type job_error_states: list
     :var dataproc_job_id: The actual "jobId" as submitted to the Dataproc API.
         This is useful for identifying or linking to the job in the Google Cloud Console
         Dataproc UI, as the actual "jobId" submitted to the Dataproc API is appended with
@@ -917,6 +942,7 @@ class DataProcSparkSqlOperator(BaseOperator):
             gcp_conn_id='google_cloud_default',
             delegate_to=None,
             region='global',
+            job_error_states=['ERROR'],
             *args,
             **kwargs):
 
@@ -931,6 +957,7 @@ class DataProcSparkSqlOperator(BaseOperator):
         self.dataproc_properties = dataproc_spark_properties
         self.dataproc_jars = dataproc_spark_jars
         self.region = region
+        self.job_error_states = job_error_states
 
     def execute(self, context):
         hook = DataProcHook(gcp_conn_id=self.gcp_conn_id,
@@ -950,7 +977,7 @@ class DataProcSparkSqlOperator(BaseOperator):
         job_to_submit = job.build()
         self.dataproc_job_id = job_to_submit["job"]["reference"]["jobId"]
 
-        hook.submit(hook.project_id, job_to_submit, self.region)
+        hook.submit(hook.project_id, job_to_submit, self.region, self.job_error_states)
 
 
 class DataProcSparkOperator(BaseOperator):
@@ -991,6 +1018,13 @@ class DataProcSparkOperator(BaseOperator):
     :type delegate_to: string
     :param region: The specified region where the dataproc cluster is created.
     :type region: string
+    :param job_error_states: Job states that should be considered error states.
+        Any states in this list will result in an error being raised and failure of the
+        task. Eg, if the ``CANCELLED`` state should also be considered a task failure,
+        pass in ``['ERROR', 'CANCELLED']``. Possible values are currently only
+        ``'ERROR'`` and ``'CANCELLED'``, but could change in the future. Defaults to
+        ``['ERROR']``.
+    :type job_error_states: list
     :var dataproc_job_id: The actual "jobId" as submitted to the Dataproc API.
         This is useful for identifying or linking to the job in the Google Cloud Console
         Dataproc UI, as the actual "jobId" submitted to the Dataproc API is appended with
@@ -1016,6 +1050,7 @@ class DataProcSparkOperator(BaseOperator):
             gcp_conn_id='google_cloud_default',
             delegate_to=None,
             region='global',
+            job_error_states=['ERROR'],
             *args,
             **kwargs):
 
@@ -1032,6 +1067,7 @@ class DataProcSparkOperator(BaseOperator):
         self.dataproc_properties = dataproc_spark_properties
         self.dataproc_jars = dataproc_spark_jars
         self.region = region
+        self.job_error_states = job_error_states
 
     def execute(self, context):
         hook = DataProcHook(gcp_conn_id=self.gcp_conn_id,
@@ -1049,7 +1085,7 @@ class DataProcSparkOperator(BaseOperator):
         job_to_submit = job.build()
         self.dataproc_job_id = job_to_submit["job"]["reference"]["jobId"]
 
-        hook.submit(hook.project_id, job_to_submit, self.region)
+        hook.submit(hook.project_id, job_to_submit, self.region, self.job_error_states)
 
 
 class DataProcHadoopOperator(BaseOperator):
@@ -1090,6 +1126,13 @@ class DataProcHadoopOperator(BaseOperator):
     :type delegate_to: string
     :param region: The specified region where the dataproc cluster is created.
     :type region: string
+    :param job_error_states: Job states that should be considered error states.
+        Any states in this list will result in an error being raised and failure of the
+        task. Eg, if the ``CANCELLED`` state should also be considered a task failure,
+        pass in ``['ERROR', 'CANCELLED']``. Possible values are currently only
+        ``'ERROR'`` and ``'CANCELLED'``, but could change in the future. Defaults to
+        ``['ERROR']``.
+    :type job_error_states: list
     :var dataproc_job_id: The actual "jobId" as submitted to the Dataproc API.
         This is useful for identifying or linking to the job in the Google Cloud Console
         Dataproc UI, as the actual "jobId" submitted to the Dataproc API is appended with
@@ -1115,6 +1158,7 @@ class DataProcHadoopOperator(BaseOperator):
             gcp_conn_id='google_cloud_default',
             delegate_to=None,
             region='global',
+            job_error_states=['ERROR'],
             *args,
             **kwargs):
 
@@ -1131,6 +1175,7 @@ class DataProcHadoopOperator(BaseOperator):
         self.dataproc_properties = dataproc_hadoop_properties
         self.dataproc_jars = dataproc_hadoop_jars
         self.region = region
+        self.job_error_states = job_error_states
 
     def execute(self, context):
         hook = DataProcHook(gcp_conn_id=self.gcp_conn_id,
@@ -1148,11 +1193,10 @@ class DataProcHadoopOperator(BaseOperator):
         job_to_submit = job.build()
         self.dataproc_job_id = job_to_submit["job"]["reference"]["jobId"]
 
-        hook.submit(hook.project_id, job_to_submit, self.region)
+        hook.submit(hook.project_id, job_to_submit, self.region, self.job_error_states)
 
 
 class DataProcPySparkOperator(BaseOperator):
-    # TODO Add docs around dataproc_job_id.
     """
     Start a PySpark Job on a Cloud DataProc cluster.
 
@@ -1190,6 +1234,13 @@ class DataProcPySparkOperator(BaseOperator):
     :type delegate_to: string
     :param region: The specified region where the dataproc cluster is created.
     :type region: string
+    :param job_error_states: Job states that should be considered error states.
+        Any states in this list will result in an error being raised and failure of the
+        task. Eg, if the ``CANCELLED`` state should also be considered a task failure,
+        pass in ``['ERROR', 'CANCELLED']``. Possible values are currently only
+        ``'ERROR'`` and ``'CANCELLED'``, but could change in the future. Defaults to
+        ``['ERROR']``.
+    :type job_error_states: list
     :var dataproc_job_id: The actual "jobId" as submitted to the Dataproc API.
         This is useful for identifying or linking to the job in the Google Cloud Console
         Dataproc UI, as the actual "jobId" submitted to the Dataproc API is appended with
@@ -1242,6 +1293,7 @@ class DataProcPySparkOperator(BaseOperator):
             gcp_conn_id='google_cloud_default',
             delegate_to=None,
             region='global',
+            job_error_states=['ERROR'],
             *args,
             **kwargs):
 
@@ -1258,6 +1310,7 @@ class DataProcPySparkOperator(BaseOperator):
         self.dataproc_properties = dataproc_pyspark_properties
         self.dataproc_jars = dataproc_pyspark_jars
         self.region = region
+        self.job_error_states = job_error_states
 
     def execute(self, context):
         hook = DataProcHook(
@@ -1288,7 +1341,7 @@ class DataProcPySparkOperator(BaseOperator):
         job_to_submit = job.build()
         self.dataproc_job_id = job_to_submit["job"]["reference"]["jobId"]
 
-        hook.submit(hook.project_id, job_to_submit, self.region)
+        hook.submit(hook.project_id, job_to_submit, self.region, self.job_error_states)
 
 
 class DataprocWorkflowTemplateBaseOperator(BaseOperator):

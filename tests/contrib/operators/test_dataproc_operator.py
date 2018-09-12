@@ -493,7 +493,7 @@ class DataprocClusterDeleteOperatorTest(unittest.TestCase):
                 dag=self.dag
             )
             with patch.object(dataproc_task.log, 'info') as mock_info:
-                with self.assertRaises(TypeError) as _:
+                with self.assertRaises(TypeError):
                     dataproc_task.execute(None)
                 mock_info.assert_called_with('Deleting cluster: %s', CLUSTER_NAME)
 
@@ -531,7 +531,7 @@ class DataProcHadoopOperatorTest(unittest.TestCase):
 
             dataproc_task.execute(None)
             mock_hook.return_value.submit.assert_called_once_with(mock.ANY, mock.ANY,
-                                                                  REGION)
+                                                                  REGION, mock.ANY)
 
     def test_dataproc_job_id_is_set(self):
         with patch(HOOK) as mock_hook:
@@ -553,7 +553,7 @@ class DataProcHiveOperatorTest(unittest.TestCase):
 
             dataproc_task.execute(None)
             mock_hook.return_value.submit.assert_called_once_with(mock.ANY, mock.ANY,
-                                                                  REGION)
+                                                                  REGION, mock.ANY)
 
     def test_dataproc_job_id_is_set(self):
         with patch(HOOK) as mock_hook:
@@ -576,7 +576,7 @@ class DataProcPySparkOperatorTest(unittest.TestCase):
 
             dataproc_task.execute(None)
             mock_hook.return_value.submit.assert_called_once_with(mock.ANY, mock.ANY,
-                                                                  REGION)
+                                                                  REGION, mock.ANY)
 
     def test_dataproc_job_id_is_set(self):
         with patch(HOOK) as mock_hook:
@@ -599,7 +599,7 @@ class DataProcSparkOperatorTest(unittest.TestCase):
 
             dataproc_task.execute(None)
             mock_hook.return_value.submit.assert_called_once_with(mock.ANY, mock.ANY,
-                                                                  REGION)
+                                                                  REGION, mock.ANY)
 
     def test_dataproc_job_id_is_set(self):
         with patch(HOOK) as mock_hook:
