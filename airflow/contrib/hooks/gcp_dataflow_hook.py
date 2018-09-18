@@ -17,6 +17,7 @@
 # specific language governing permissions and limitations
 # under the License.
 import json
+import re
 import select
 import subprocess
 import time
